@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Grimmjow Pair</title>
+<style>
+body{background:#0a0a0a;color:#fff;font-family:sans-serif;display:flex;justify-content:center;align-items:center;min-height:100vh;margin:0}
+.card{background:#1a1a1a;padding:25px;border-radius:15px;width:90%;max-width:350px;text-align:center;border:1px solid #333}
+h1{color:#00ff88}
+input{width:90%;padding:12px;border-radius:8px;border:none;margin:15px 0;font-size:16px;direction:ltr}
+button{background:#00ff88;color:#000;padding:12px 20px;border:none;border-radius:8px;font-weight:bold;width:100%;cursor:pointer;font-size:16px}
+#result{margin-top:20px;background:#000;padding:15px;border-radius:8px;word-break:break-all;font-size:20px;letter-spacing:3px;display:none}
+</style>
+</head>
+<body>
+<div class="card">
+<h1>Grimmjow Pair</h1>
+<p>دخل نمرة الواتساب مع رمز البلد</p>
+<p style="font-size:12px;color:#888">مثال: 212712345678</p>
+<input type="text" id="number" placeholder="212...">
+<button onclick="getCode()">جيب كود الاقتران</button>
+<div id="result"></div>
+</div>
+<script>
+async function getCode(){
+ let num=document.getElementById('number').value;
+ let resDiv=document.getElementById('result');
+ if(!num){alert('دخل النمرة');return}
+ resDiv.style.display='block';
+ resDiv.innerHTML='كيتسنى... ⏳';
+ try{
+  let res=await fetch('/pair?number='+num);
+  let data=await res.json();
+  if(data.code){
+   resDiv.innerHTML='<b style="color:#00ff88">الكود ديالك:</b><br><br><span style="font-size:28px">'+data.code+'</span><br><br><small>سير لواتساب > الأجهزة المرتبطة > ربط جهاز > ربط برقم الهاتف</small>';
+  } else {
+   resDiv.innerHTML='خطأ: '+(data.error||data.message);
+  }
+ }catch(e){resDiv.innerHTML='خطأ في السيرفر';}
+}
+</script>
+</body>
+</html>
